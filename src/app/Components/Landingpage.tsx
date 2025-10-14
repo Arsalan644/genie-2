@@ -9,6 +9,7 @@ import WhyJoin from "./WhyJoin";
 import TextLoop from "./textloop.js";
 import WorldMapProfiles from "./Map.jsx";
 import {CaseStudiesAnimated} from './SectionFeatures';
+import Grid from "./Grid";
 
 // --- Header ---
 const GenieLogo: React.FC = () => (
@@ -240,7 +241,8 @@ const LandingPage: React.FC = () => {
       <Header />
       <main>
         <Hero />
-        <TextLoop />
+        {/* <TextLoop /> */}
+        <Grid />
         <CaseStudiesAnimated />
         {/* <Features /> */}
         <WhyJoin />
