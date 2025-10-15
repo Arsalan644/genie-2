@@ -70,3 +70,44 @@
 .animate-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .hero-media {
+    width: 100%;
+    gap: 8px;
+    margin-top: 16px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bird {
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+  }
+
+  .hero-media img {
+    width: 100%;
+    height: auto;
+  }
+
+  .background-gradient {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-media {
+    gap: 6px;
+    margin-top: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .world {
+    font-size: 0.85rem;
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import React from "react";
 import "./Landingpage.css";
 import "./Footer.css";
@@ -10,6 +10,7 @@ import TextLoop from "./textloop.js";
 import WorldMapProfiles from "./Map.jsx";
 import {CaseStudiesAnimated} from './SectionFeatures';
 import Grid from "./Grid";
+import { Footerdemo } from "./Ui/footer-section";
 
 // --- Header ---
 const GenieLogo: React.FC = () => (
@@ -22,6 +23,39 @@ const GenieLogo: React.FC = () => (
 );
 
 const Header: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const toggleBtnRef = useRef<HTMLButtonElement | null>(null);
+
+  // Close on click outside and on Escape
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (menuRef.current && !menuRef.current.contains(target) && toggleBtnRef.current && !toggleBtnRef.current.contains(target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("mousedown", handleClick);
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      window.removeEventListener("mousedown", handleClick);
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [isMobileMenuOpen]);
+
+  // Auto-close when resizing to desktop
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      if (mq.matches) setIsMobileMenuOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
   return (
     <header className="py-6">
       <div className="container mx-auto px-6 lg:px-8">
@@ -36,9 +70,44 @@ const Header: React.FC = () => {
             </a>
           </nav>
           <div className="flex items-center gap-4">
-            <button className="bg-[#18453B] text-white font-bold py-2 px-6 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all">
+            <button className="hidden sm:inline-flex bg-[#18453B] text-white font-bold py-2 px-6 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all">
               Join Beta
             </button>
+            <button
+              type="button"
+              aria-label="Toggle menu"
+              aria-controls="mobile-nav"
+              aria-expanded={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen((v) => !v)}
+              ref={toggleBtnRef}
+              className="lg:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-astro-green/40"
+            >
+              {isMobileMenuOpen ? (
+                // X icon
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" /></svg>
+              ) : (
+                // Hamburger icon
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path fillRule="evenodd" d="M3.75 5.25A.75.75 0 0 1 4.5 4.5h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm0 7.5a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm.75 6.75a.75.75 0 0 0 0 1.5h15a.75.75 0 0 0 0-1.5h-15Z" clipRule="evenodd" /></svg>
+              )}
+            </button>
+          </div>
+        </div>
+        {/* Mobile nav */}
+        <div
+          id="mobile-nav"
+          className={`${isMobileMenuOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"} lg:hidden grid transition-[grid-template-rows,opacity] duration-300 ease-out`}
+          ref={menuRef}
+        >
+          <div className="overflow-hidden">
+            <div className="mt-4 rounded-xl border border-gray-200 bg-white/80 backdrop-blur p-4 shadow-sm">
+              <div className="flex flex-col gap-3 text-gray-700 font-medium">
+                <a href="#" className="hover:text-black transition-colors">Why Genie</a>
+                <a href="#" className="hover:text-black transition-colors">Genie Users</a>
+              </div>
+              <button className="mt-4 w-full bg-[#18453B] text-white font-bold py-2.5 px-4 rounded-full shadow-md hover:shadow-lg hover:scale-[1.02] transition-all">
+                Join Beta
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -242,13 +311,14 @@ const LandingPage: React.FC = () => {
       <main>
         <Hero />
         {/* <TextLoop /> */}
-        <Grid />
-        <CaseStudiesAnimated />
+        {/* <Grid /> */}
+        {/* <CaseStudiesAnimated /> */}
         {/* <Features /> */}
-        <WhyJoin />
+        {/* <WhyJoin /> */}
         {/* <WorldMapProfiles/> */}
       </main>
-      <Footer />
+      {/* <Footer />
+      <Footerdemo /> */}
     </div>
   );
 };
